@@ -1,17 +1,31 @@
+import { useEffect, useState } from "react";
+import ProductCard from "../components/ProductCard";
+
 function Products() {
-  return (
-    <div className="products-page">
-      <h1>Our Products</h1>
-      <p>Explore our wide selection of products below:</p>
-      {/* This would be replaced with a dynamic list of products */}
-      <ul>
-        <li>Product 1</li>
-        <li>Product 2</li>
-        <li>Product 3</li>
-        {/* And so on */}
-      </ul>
-    </div>
-  );
+	const [products, setProducts] = useState([]);
+
+	useEffect(() => {
+		fetch("https://v2.api.noroff.dev/online-shop")
+			.then((response) => response.json())
+			.then((data) => {
+				console.log("Fetched data:", data);
+				setProducts(data.data);
+			})
+			.catch((error) => console.error(error));
+	}, []);
+
+	return (
+		<div className="container mt-3">
+			<div className="row">
+				{Array.isArray(products) &&
+					products.map((product) => (
+						<div className="col-md-4" key={product.id}>
+							<ProductCard product={product} />
+						</div>
+					))}
+			</div>
+		</div>
+	);
 }
 
 export default Products;
