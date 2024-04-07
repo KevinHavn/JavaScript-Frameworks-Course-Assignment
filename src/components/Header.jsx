@@ -1,4 +1,5 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
+import CartIcon from "./CartIcon";
 import { Link } from "react-router-dom";
 
 export function Header() {
@@ -16,6 +17,7 @@ export function Header() {
 							<Link className="nav-link" to="../Products">
 								Products
 							</Link>
+							<Link className="nav-link" to="../Cart"><CartIcon /></Link>
 						</Nav>
 					</Navbar.Collapse>
 				</Container>

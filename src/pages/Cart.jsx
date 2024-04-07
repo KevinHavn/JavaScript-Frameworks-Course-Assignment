@@ -1,18 +1,29 @@
-function Cart() {
+import { useEffect, useState } from "react";
+function CartPage() {
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    setCartItems(cart);
+  }, []);
+
   return (
-    <div className="cart-page">
-      <h1>Your Cart</h1>
-      <p>Review the items in your cart:</p>
-      {/* In a real app, the cart items would be dynamic */}
-      <ul>
-        <li>Item 1</li>
-        <li>Item 2</li>
-        {/* And so on */}
-      </ul>
-      <p>Total: $XXX.XX</p>
-      {/* Include checkout button, etc. */}
+    <div className="container mt-3">
+      <h2>Your Cart</h2>
+      {cartItems.length > 0 ? (
+        <ul>
+          {cartItems.map(item => (
+            <li key={item.id}>
+              {item.title} - {item.quantity} x ${item.price}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Your cart is empty.</p>
+      )}
+      {/* Implement checkout button and functionality */}
     </div>
   );
 }
 
-export default Cart;
+export default CartPage;
