@@ -1,13 +1,68 @@
+import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+
 function Contact() {
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		alert("Form submitted!");
+	};
+
 	return (
-		<div className="contact-page">
-			<h1>Contact Us</h1>
-			{/* A real application might include a contact form here */}
-			<ul>
-				<li>Email: support@example.com</li>
-				<li>Phone: 123-456-7890</li>
-			</ul>
-		</div>
+		<Container className="mt-5">
+			<Row className="justify-content-center">
+				<Col md={6}>
+					<Card>
+						<Card.Body>
+							<Card.Title>Contact Us</Card.Title>
+							<Form onSubmit={handleSubmit}>
+								<Form.Group controlId="fullName">
+									<Form.Label>Full Name</Form.Label>
+									<Form.Control
+										type="text"
+										placeholder="Enter your full name"
+										required
+										minLength="3"
+									/>
+								</Form.Group>
+
+								<Form.Group controlId="subject">
+									<Form.Label>Subject</Form.Label>
+									<Form.Control
+										type="text"
+										placeholder="Enter a subject"
+										required
+										minLength="3"
+									/>
+								</Form.Group>
+
+								<Form.Group controlId="email">
+									<Form.Label>Email</Form.Label>
+									<Form.Control
+										type="email"
+										placeholder="Enter your email"
+										required
+									/>
+								</Form.Group>
+
+								<Form.Group controlId="body">
+									<Form.Label>Message</Form.Label>
+									<Form.Control
+										as="textarea"
+										placeholder="Enter your message"
+										required
+										minLength="3"
+										rows={3}
+									/>
+								</Form.Group>
+
+								<Button variant="primary" type="submit" className="mt-3">
+									Submit
+								</Button>
+							</Form>
+						</Card.Body>
+					</Card>
+				</Col>
+			</Row>
+		</Container>
 	);
 }
 
