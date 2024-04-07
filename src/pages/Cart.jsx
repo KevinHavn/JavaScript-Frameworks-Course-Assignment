@@ -16,6 +16,7 @@ function CartPage() {
 	const [show, setShow] = useState(false);
 	const [alertMsg, setAlertMsg] = useState("");
 	const [total, setTotal] = useState(0);
+	const [totalItems, setTotalItems] = useState(0);
 
 	const removeFromCart = (itemId) => {
 		const newCart = cartItems.filter((item) => item.id !== itemId);
@@ -26,10 +27,13 @@ function CartPage() {
 
 	useEffect(() => {
 		let total = 0;
+		let itemsCount = 0;
 		cartItems.forEach((item) => {
 			total += item.price * item.quantity;
+			itemsCount += item.quantity;
 		});
 		setTotal(total);
+		setTotalItems(itemsCount);
 	}, [cartItems]);
 
 	return (
@@ -78,7 +82,8 @@ function CartPage() {
 					<Card className="mb-3">
 						<Card.Body>
 							<h3>Order Summary</h3>
-							<Card.Text>Total: ${total.toFixed(2)}</Card.Text>
+							<Card.Text>Total Items: {totalItems}</Card.Text>
+							<Card.Text>Total Price: ${total.toFixed(2)}</Card.Text>
 							<Button as={Link} to="../checkout" variant="success">
 								Proceed to Checkout
 							</Button>
