@@ -1,15 +1,44 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
+import { Alert } from "react-bootstrap";
+import { useCart } from "./CartContext";
 
 function ProductCard({ product }) {
+	const [showAlert, setShowAlert] = useState(false);
+	const [error, setError] = useState("");
+	const { updateCart, cartItems } = useCart();
+
 	const handleAddToCart = () => {
-		let cart = JSON.parse(localStorage.getItem("cart")) || [];
-		const productToAdd = { ...product, quantity: 1 }; // Add a quantity field
-		cart.push(productToAdd);
-		localStorage.setItem("cart", JSON.stringify(cart));
+		const isProductInCart = cartItems.some((item) => item.id === product.id);
+
+		if (isProductInCart) {
+			setError(`The product "${product.title}" is already in your cart.`);
+			setTimeout(() => setError(""), 5000); 
+		} else {
+			const newCart = [...cartItems, { ...product, quantity: 1 }];
+			updateCart(newCart);
+			setShowAlert(true);
+			setTimeout(() => setShowAlert(false), 3000);
+		}
 	};
 
 	return (
 		<div className="card h-100">
+			{showAlert && (
+				<Alert
+					variant="success"
+					onClose={() => setShowAlert(false)}
+					dismissible>
+					{product.title} added to cart!
+				</Alert>
+			)}
+
+			{error && (
+				<Alert variant="danger" onClose={() => setError("")} dismissible>
+					{error}
+				</Alert>
+			)}
+
 			<img
 				src={product.image.url}
 				alt={product.image.alt || product.title}
