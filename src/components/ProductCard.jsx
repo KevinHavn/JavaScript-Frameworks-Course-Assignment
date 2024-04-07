@@ -5,22 +5,39 @@ import { useCart } from "./CartContext";
 
 function ProductCard({ product }) {
 	const [showAlert, setShowAlert] = useState(false);
-	const [error, setError] = useState("");
-	const { updateCart, cartItems } = useCart();
+	const [alertMessage, setAlertMessage] = useState("");
+	const { cartItems, updateCart } = useCart();
 
 	const handleAddToCart = () => {
 		const isProductInCart = cartItems.some((item) => item.id === product.id);
 
 		if (isProductInCart) {
-			setError(`The product "${product.title}" is already in your cart.`);
-			setTimeout(() => setError(""), 5000); 
+			setAlertMessage(
+				`The product "${product.title}" is already in your cart.`
+			);
+			setShowAlert(true);
+			setTimeout(() => {
+				setShowAlert(false);
+				setAlertMessage("");
+			}, 3000);
 		} else {
 			const newCart = [...cartItems, { ...product, quantity: 1 }];
 			updateCart(newCart);
+			setAlertMessage(`${product.title} added to cart!`);
 			setShowAlert(true);
-			setTimeout(() => setShowAlert(false), 3000);
+			setTimeout(() => {
+				setShowAlert(false);
+				setAlertMessage("");
+			}, 3000);
 		}
 	};
+
+	let discountPercentage = 0;
+	if (product.price > product.discountedPrice) {
+		discountPercentage = Math.round(
+			((product.price - product.discountedPrice) / product.price) * 100
+		);
+	}
 
 	return (
 		<div className="card h-100">
@@ -29,16 +46,9 @@ function ProductCard({ product }) {
 					variant="success"
 					onClose={() => setShowAlert(false)}
 					dismissible>
-					{product.title} added to cart!
+					{alertMessage}
 				</Alert>
 			)}
-
-			{error && (
-				<Alert variant="danger" onClose={() => setError("")} dismissible>
-					{error}
-				</Alert>
-			)}
-
 			<img
 				src={product.image.url}
 				alt={product.image.alt || product.title}
@@ -47,16 +57,18 @@ function ProductCard({ product }) {
 			<div className="card-body">
 				<h5 className="card-title">{product.title}</h5>
 				<p className="card-text">{product.description}</p>
-				<p className="card-text">
-					Price: $
-					{product.discountedPrice < product.price
-						? product.discountedPrice
-						: product.price}
-				</p>
-				{product.discountedPrice < product.price && (
-					<p className="text-danger">
-						Discount: ${product.price - product.discountedPrice}
-					</p>
+				{discountPercentage > 0 ? (
+					<>
+						<p className="card-text text-danger">
+							Sale! {discountPercentage}% off
+						</p>
+						<p className="card-text">
+							<del>${product.price.toFixed(2)}</del> $
+							{product.discountedPrice.toFixed(2)}
+						</p>
+					</>
+				) : (
+					<p className="card-text">Price: ${product.price.toFixed(2)}</p>
 				)}
 				<button className="btn btn-primary" onClick={handleAddToCart}>
 					Add to Cart
