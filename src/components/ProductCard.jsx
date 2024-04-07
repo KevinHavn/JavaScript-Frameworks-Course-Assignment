@@ -10,7 +10,7 @@ function ProductCard({ product }) {
     const { cartItems, updateCart } = useCart();
 
     const handleAddToCart = (event) => {
-        event.stopPropagation(); // Prevent event from bubbling up to the link
+        event.stopPropagation();
         const isProductInCart = cartItems.some(item => item.id === product.id);
 
         if (isProductInCart) {

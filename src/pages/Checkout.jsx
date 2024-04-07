@@ -7,7 +7,6 @@ function Checkout() {
   const { updateCart } = useCart();
 
   useEffect(() => {
-    // Clears the cart when this component is mounted
     updateCart([]);
   }, [updateCart]);
 
