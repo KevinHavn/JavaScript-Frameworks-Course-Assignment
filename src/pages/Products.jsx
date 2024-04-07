@@ -1,31 +1,37 @@
+// Products.jsx
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
+import SearchBar from "../components/SearchBar";
 
 function Products() {
-	const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-	useEffect(() => {
-		fetch("https://v2.api.noroff.dev/online-shop")
-			.then((response) => response.json())
-			.then((data) => {
-				console.log("Fetched data:", data);
-				setProducts(data.data);
-			})
-			.catch((error) => console.error(error));
-	}, []);
+  useEffect(() => {
+    fetch("https://v2.api.noroff.dev/online-shop")
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data.data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
-	return (
-		<div className="container mt-3">
-			<div className="row">
-				{Array.isArray(products) &&
-					products.map((product) => (
-						<div className="col-md-4" key={product.id}>
-							<ProductCard product={product} />
-						</div>
-					))}
-			</div>
-		</div>
-	);
+  const filteredProducts = products.filter(product =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="container mt-3">
+      <SearchBar onSearchChange={setSearchTerm} />
+      <div className="row">
+        {filteredProducts.map((product) => (
+          <div className="col-md-4" key={product.id}>
+            <ProductCard product={product} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default Products;
