@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
 
-function Products() {
+function Home() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -21,9 +21,9 @@ function Products() {
   );
 
   return (
-    <div className="container mt-3">
+    <div className="container my-5">
       <SearchBar onSearchChange={setSearchTerm} />
-      <div className="row">
+      <div className="row row-gap-4">
         {filteredProducts.map((product) => (
           <div className="col-md-4" key={product.id}>
             <ProductCard product={product} />
@@ -34,4 +34,4 @@ function Products() {
   );
 }
 
-export default Products;
+export default Home;
