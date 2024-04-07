@@ -12,23 +12,22 @@ function ProductDetailPage() {
 	const [error, setError] = useState(null);
 	const [cartError, setCartError] = useState("");
 
-    useEffect(() => {
-        fetch(`https://v2.api.noroff.dev/online-shop/${productId}`)
-            .then((response) => response.json())
-            .then((data) => {
-                console.log("Fetched product data:", data);
-                // Ensure you're accessing the product data correctly
-                setProduct(data.data);
-            })
-            .catch((error) => {
-                console.error("Fetching error: ", error);
-                setError(error.message);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, [productId]);
-    
+	useEffect(() => {
+		fetch(`https://v2.api.noroff.dev/online-shop/${productId}`)
+			.then((response) => response.json())
+			.then((data) => {
+				console.log("Fetched product data:", data);
+				setProduct(data.data);
+			})
+			.catch((error) => {
+				console.error("Fetching error: ", error);
+				setError(error.message);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	}, [productId]);
+
 	const handleAddToCart = () => {
 		const isProductInCart = cartItems.some((item) => item.id === product.id);
 
